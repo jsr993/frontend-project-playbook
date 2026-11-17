@@ -1,0 +1,83 @@
+---
+description: Naming and import rules
+globs:
+  - "src/**/*"
+alwaysApply: false
+---
+
+# Naming and Imports
+
+## Naming
+
+Folders:
+
+```txt
+kebab-case
+```
+
+Files other than React component files:
+
+```txt
+kebab-case
+```
+
+React components:
+
+```txt
+PascalCase
+```
+
+React component files must also use `PascalCase`, for example `UserCard.tsx` exporting `UserCard`.
+
+Hooks:
+
+```txt
+useSomething
+```
+
+Effector stores:
+
+```txt
+$storeName
+```
+
+Effector events:
+
+```txt
+actionPerformed
+```
+
+Effector effects:
+
+```txt
+actionFx
+```
+
+Fixed module-level constants:
+
+```txt
+UPPER_SNAKE_CASE
+```
+
+Use this convention for fixed values such as `MAX_RETRY_COUNT`. A `const` declaration alone does not require uppercase naming: use `camelCase` for local values, functions, and objects holding data.
+
+## Imports
+
+Use aliases for cross-slice imports.
+
+Preferred:
+
+```ts
+import { UserCard } from '@/entities/user';
+import { Button } from '@/shared/ui/';
+```
+
+Always import shared UI components through the segment's public API at `@/shared/ui/`, backed by `src/shared/ui/index.ts`. Do not use component-specific paths such as `@/shared/ui/button` or paths to internal files. Within `shared/ui` itself, use relative imports directly to files instead of importing its own public API.
+
+Avoid deep relative imports across slices:
+
+```ts
+import { Button } from '../../../../shared/ui';
+```
+
+Do not import another slice's internals.

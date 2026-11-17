@@ -1,0 +1,99 @@
+---
+description: Feature-Sliced Design architecture rules
+globs:
+  - "src/**/*"
+alwaysApply: false
+---
+
+# Feature-Sliced Design
+
+Use Feature-Sliced Design as the frontend architecture.
+
+## Available Layers
+
+The available layers, from top to bottom, are:
+
+```txt
+src/
+  app/
+  pages/
+  widgets/
+  features/
+  entities/
+  shared/
+```
+
+- `app` — application startup, providers, and application-wide configuration.
+- `pages` — application pages.
+- `widgets` — large, self-contained UI blocks.
+- `features` — user actions and interactions.
+- `entities` — business entities and their related UI and models.
+- `shared` — reusable UI and infrastructure independent of business domains and scenarios.
+
+Create layers and segments only when needed; do not create empty folders to complete this structure.
+
+Layers `pages`, `widgets`, `features`, and `entities` contain domain-oriented slices. Layers `app` and `shared` have segments directly, without slices.
+
+## Dependency Direction
+
+Allowed dependency direction:
+
+```txt
+app
+pages
+widgets
+features
+entities
+shared
+```
+
+- Imports between layers may point only to layers below the importing layer.
+- Files within the same slice may import each other.
+- Imports between different slices on the same layer are forbidden by default.
+- In `app` and `shared`, imports between segments of the same layer are allowed because these layers do not contain slices. Avoid circular dependencies.
+
+Allowed examples:
+
+- `features` may import from `entities` and `shared`
+- `widgets` may import from `features`, `entities`, and `shared`
+- `pages` may import from `widgets`, `features`, `entities`, and `shared`
+- `shared` must not import from any upper layer
+
+Forbidden examples:
+
+- `entities` importing from `features`
+- `features` importing from `widgets`
+- `shared` importing from `entities`
+- `widgets` importing from `pages`
+- `features/create-entry` importing from `features/delete-entry`
+
+## Public API
+
+Every slice must expose a public API through `index.ts`.
+
+Correct:
+
+```ts
+import { UserCard } from '@/entities/user';
+```
+
+Incorrect:
+
+```ts
+import { UserCard } from '@/entities/user/ui/UserCard';
+```
+
+Do not import internal implementation details from another slice.
+
+Within a slice, use relative imports directly to internal files rather than importing through the slice's own `index.ts`.
+
+In `shared`, expose public entry points for individual segments, such as `@/shared/api` and `@/shared/ui/`. Do not require a single `shared/index.ts` that re-exports everything. Consumers must use these public entry points rather than internal implementation paths.
+
+Always import shared UI components from `@/shared/ui/`, backed by `src/shared/ui/index.ts`. Component-specific imports such as `@/shared/ui/button` are forbidden. Within `shared/ui` itself, use relative imports directly to files rather than importing its own public API.
+
+## Architecture Decisions
+
+- Do not invent additional layers.
+- Do not create shared abstractions before they are needed.
+- Do not create generic repositories, factories, or universal services unless explicitly requested.
+- If the architecture is unclear, ask for clarification instead of making assumptions.

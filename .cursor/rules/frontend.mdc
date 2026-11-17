@@ -1,0 +1,89 @@
+---
+description: Core frontend rules
+alwaysApply: true
+---
+
+# Frontend Rules
+
+## Project
+
+The codebase must stay simple, explicit, and maintainable.
+
+## Mandatory Stack
+
+Use only this stack unless explicitly instructed otherwise:
+
+- React
+- Vite
+- TypeScript
+- Effector
+- Atomic Router
+- Yarn
+- Feature-Sliced Design
+- React Hook Form
+- Zod
+
+## Forbidden Technologies
+
+Do not introduce:
+
+- styled-components
+- shadcn/ui
+- Redux
+- MobX
+- Zustand
+- Recoil
+- React Router
+- Next.js
+- SCSS architecture
+- Tailwind CSS
+- npm
+- pnpm
+- bun
+
+## Styling
+
+- When the project has no established UI library or styling approach, use plain CSS Modules (`*.module.css`) for component styles. Do not add a UI library solely for styling.
+- Keep each stylesheet next to its component inside the owning FSD slice and apply classes through `className`.
+- Use shared CSS custom properties for design tokens such as colors, spacing, typography, radii, and shadows. Reuse existing tokens before adding new ones.
+- Keep global CSS limited to resets, font declarations, design tokens, themes, and base document styles. Do not put component-specific styles there.
+- Use CSS classes for static styles and variants. Use inline styles only for values computed at runtime, preferably by passing CSS custom properties.
+- Keep selectors local and shallow; avoid IDs, `!important`, and selectors that depend on another component's internal markup.
+- Include responsive layouts, visible keyboard focus, and appropriate hover, disabled, and error states where applicable.
+- Reuse existing UI components before creating new ones. CSS Modules provide styling, not accessible control behavior; preserve semantic HTML and keyboard interaction.
+- In an existing project, follow its established styling approach. Do not introduce a second styling system or migrate existing components unless explicitly requested.
+
+## General Principles
+
+- Prefer readable code over clever code.
+- Prefer explicit implementation over hidden magic.
+- Do not create abstractions before they are needed.
+- Do not generate future-proof infrastructure without a real use case.
+- Do not duplicate existing logic, entities, features, or components.
+- Do not make architectural decisions without explicit instruction.
+- Generate only what was requested.
+
+## TypeScript
+
+- Use TypeScript.
+- Avoid `any`.
+- If `any` is temporarily unavoidable, add a TODO comment explaining why.
+- Prefer explicit domain types.
+- Prefer `interface` for domain models.
+- Prefer `type` for utility types, unions, and mapped types.
+- When a Zod schema defines the data shape, infer the type from the schema instead of creating a duplicate interface or type.
+
+## Data Access
+
+- UI components must not import JSON mock files directly.
+- Access API data through `shared/api` services.
+
+## Code Quality
+
+- One file should have one main responsibility.
+- Keep files small and focused.
+- Avoid files larger than 300 lines.
+- Avoid deeply nested JSX.
+- Keep business logic out of React components.
+- Keep UI components presentation-focused.
+- Reuse existing code before creating new code.

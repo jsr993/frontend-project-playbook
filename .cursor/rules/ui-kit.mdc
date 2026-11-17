@@ -1,0 +1,37 @@
+---
+description: General rules for UI kit components in shared/ui
+globs:
+  - "src/shared/ui/**/*"
+alwaysApply: false
+---
+
+# Shared UI Kit
+
+## Scope
+
+- Use `shared/ui` for domain-independent components without API calls, business models, or imports from upper FSD layers.
+- Reuse existing components. Create only components and variants needed by the task; extract repeated patterns or explicitly requested UI kit components.
+- Keep domain-specific UI in its owning slice. Pass business data and actions through props and callbacks; local UI state is allowed.
+
+## Structure and Imports
+
+```txt
+src/shared/ui/
+  button/
+    Button.tsx
+    button.module.css
+  index.ts
+```
+
+- Follow the existing structure. Folders and non-component files use `kebab-case`; React component files and exports use `PascalCase`.
+- Export public components and types explicitly from `shared/ui/index.ts`; keep helpers private.
+- Consumers import only from `@/shared/ui/`; component-specific paths such as `@/shared/ui/button` are forbidden.
+- Inside `shared/ui`, use relative imports directly to files, without importing its own public API.
+
+## Component API and Styles
+
+- Keep components focused, with typed props and sensible defaults. Preserve relevant native props and handlers.
+- Prefer explicit `variant` and `size` props over conflicting boolean flags; support `className` when needed.
+- Keep React Hook Form and Zod integration in `shared/form`, outside base UI controls.
+- Follow the existing styling approach; otherwise use CSS Modules and shared CSS variables for design tokens. No UI library is required.
+- Keep styles local, reuse tokens, and use inline styles only for runtime-computed values. Do not introduce a second styling system.
