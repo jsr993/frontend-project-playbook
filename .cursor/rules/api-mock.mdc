@@ -8,7 +8,7 @@ alwaysApply: false
 
 # API and Mock Data
 
-The project currently uses mock data, but the API layer must be designed so it can later be replaced with real backend requests.
+When a project uses mock data, keep it behind the public API service so it can later be replaced with real backend requests.
 
 ## Structure
 
